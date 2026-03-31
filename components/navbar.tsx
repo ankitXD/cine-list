@@ -10,6 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { SignInButton, SignUpButton, Show, UserButton } from "@clerk/nextjs";
 
 const navLinks = [
   { href: "#features", label: "Features" },
@@ -41,9 +42,25 @@ export function Navbar() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <Button size="sm" className="hidden sm:inline-flex">
-            Get Started
-          </Button>
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <Button size="sm" className="hidden sm:inline-flex">
+                Sign In
+              </Button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <Button
+                size="sm"
+                className="hidden sm:inline-flex"
+                variant="default"
+              >
+                Get Started
+              </Button>
+            </SignUpButton>
+          </Show>
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
 
           <Sheet>
             <SheetTrigger asChild>
@@ -67,7 +84,16 @@ export function Navbar() {
                     {link.label}
                   </Link>
                 ))}
-                <Button className="mt-4 w-full">Get Started</Button>
+                <Show when="signed-out">
+                  <SignUpButton mode="modal">
+                    <Button className="mt-4 w-full">Get Started</Button>
+                  </SignUpButton>
+                </Show>
+                <Show when="signed-in">
+                  <div className="mt-4">
+                    <UserButton />
+                  </div>
+                </Show>
               </nav>
             </SheetContent>
           </Sheet>

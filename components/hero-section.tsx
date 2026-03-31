@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Clapperboard, Sparkles, Users } from "lucide-react";
+import Link from "next/link";
 
 export function HeroSection() {
   return (
@@ -34,9 +35,11 @@ export function HeroSection() {
               Start Building Your List
               <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="lg">
-              See How It Works
-            </Button>
+            <Link href="#how-it-works">
+              <Button variant="outline" size="lg">
+                See How It Works
+              </Button>
+            </Link>
           </div>
 
           {/* Stats */}
