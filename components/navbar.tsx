@@ -9,6 +9,7 @@ import {
   SheetTrigger,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const navLinks = [
   { href: "#features", label: "Features" },
@@ -39,6 +40,7 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <Button size="sm" className="hidden sm:inline-flex">
             Get Started
           </Button>
