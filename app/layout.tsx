@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Great_Vibes } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+
+const greatVibes = Great_Vibes({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-brand",
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,7 +23,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Cine List",
-  description: "Add your favourite movies or shows based on your preferences.",
+  description:
+    "Track movies and shows by your favorite actors, directors, and crew. Build lists around the people you love.",
 };
 
 export default function RootLayout({
@@ -29,12 +36,13 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn(
-        "h-full",
+        "dark h-full",
         "antialiased",
         geistSans.variable,
         geistMono.variable,
-        "font-sans",
         inter.variable,
+        greatVibes.variable,
+        "font-sans",
       )}
     >
       <body className="min-h-full flex flex-col">{children}</body>
