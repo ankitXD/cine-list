@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Film, Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Film, LayoutDashboard, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -20,6 +21,9 @@ const navLinks = [
 ];
 
 export function Navbar() {
+  const pathname = usePathname();
+  const isDashboard = pathname.startsWith("/dashboard");
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
@@ -28,17 +32,19 @@ export function Navbar() {
           <span className="font-brand text-2xl">Cine List</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        {!isDashboard && (
+          <nav className="hidden md:flex items-center gap-6 text-sm">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        )}
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
@@ -59,6 +65,19 @@ export function Navbar() {
             </SignUpButton>
           </Show>
           <Show when="signed-in">
+            {!isDashboard && (
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                className="hidden sm:inline-flex"
+              >
+                <Link href="/dashboard">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  Dashboard
+                </Link>
+              </Button>
+            )}
             <UserButton />
           </Show>
 
@@ -75,21 +94,31 @@ export function Navbar() {
                 Cine List
               </SheetTitle>
               <nav className="flex flex-col gap-4 mt-8">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                {!isDashboard &&
+                  navLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
                 <Show when="signed-out">
                   <SignUpButton mode="modal">
                     <Button className="mt-4 w-full">Get Started</Button>
                   </SignUpButton>
                 </Show>
                 <Show when="signed-in">
+                  {!isDashboard && (
+                    <Link
+                      href="/dashboard"
+                      className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
+                    >
+                      <LayoutDashboard className="h-5 w-5" />
+                      Dashboard
+                    </Link>
+                  )}
                   <div className="mt-4">
                     <UserButton />
                   </div>
