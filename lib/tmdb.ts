@@ -122,3 +122,27 @@ export async function getPersonCredits(personId: number): Promise<Movie[]> {
   // Sort by year descending (most recent first)
   return results.sort((a, b) => b.year.localeCompare(a.year));
 }
+
+interface TmdbTrendingItem {
+  id: number;
+  title?: string;
+  name?: string;
+  poster_path: string | null;
+  media_type: "movie" | "tv";
+}
+
+interface TmdbTrendingResponse {
+  results: TmdbTrendingItem[];
+}
+
+/** Fetch trending movies & shows for the week (used on the landing hero). */
+export async function getTrending(
+  limit = 6,
+): Promise<{ id: number; title: string; posterPath: string | null }[]> {
+  const data = await tmdbFetch<TmdbTrendingResponse>("/trending/all/week");
+  return data.results.slice(0, limit).map((item) => ({
+    id: item.id,
+    title: item.title ?? item.name ?? "Unknown",
+    posterPath: item.poster_path,
+  }));
+}

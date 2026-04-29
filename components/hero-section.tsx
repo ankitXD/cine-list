@@ -1,9 +1,22 @@
+import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Clapperboard, Sparkles, Users } from "lucide-react";
-import Link from "next/link";
+import { getTrending } from "@/lib/tmdb";
+import { tmdbImageUrl } from "@/lib/tmdb-utils";
 
-export function HeroSection() {
+export async function HeroSection() {
+  let trending: { id: number; title: string; posterPath: string | null }[] = [];
+  try {
+    trending = await getTrending(6);
+  } catch {
+    // fall back to empty — placeholders will render
+  }
+
+  // Pad to always show 5 slots
+  const posters = trending.slice(0, 5);
+
   return (
     <section className="relative overflow-hidden">
       {/* Background gradient effects */}
@@ -31,9 +44,11 @@ export function HeroSection() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-            <Button size="lg" className="gap-2">
-              Start Building Your List
-              <ArrowRight className="h-4 w-4" />
+            <Button size="lg" className="gap-2" asChild>
+              <Link href="/dashboard">
+                Start Building Your List
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </Button>
             <Link href="#how-it-works">
               <Button variant="outline" size="lg">
@@ -55,22 +70,33 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Decorative poster grid preview */}
+        {/* Trending poster grid preview */}
         <div className="relative mt-16 mx-auto max-w-4xl">
           <div className="grid grid-cols-5 gap-3 md:gap-4 opacity-80">
-            {[
-              { title: "Film 1", color: "bg-primary/10" },
-              { title: "Film 2", color: "bg-primary/15" },
-              { title: "Film 3", color: "bg-primary/20" },
-              { title: "Film 4", color: "bg-primary/15" },
-              { title: "Film 5", color: "bg-primary/10" },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className={`aspect-2/3 rounded-lg ${item.color} border border-border/50 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-backwards`}
-                style={{ animationDelay: `${i * 100 + 200}ms` }}
-              />
-            ))}
+            {Array.from({ length: 5 }).map((_, i) => {
+              const item = posters[i];
+              const src = item?.posterPath
+                ? tmdbImageUrl(item.posterPath, "w342")
+                : null;
+              return (
+                <div
+                  key={i}
+                  className="aspect-2/3 rounded-lg overflow-hidden border border-border/50 bg-primary/10 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-backwards"
+                  style={{ animationDelay: `${i * 100 + 200}ms` }}
+                >
+                  {src && (
+                    <Image
+                      src={src}
+                      alt={item!.title}
+                      width={342}
+                      height={513}
+                      className="w-full h-full object-cover"
+                      sizes="(max-width: 768px) 20vw, 15vw"
+                    />
+                  )}
+                </div>
+              );
+            })}
           </div>
           <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent" />
         </div>
