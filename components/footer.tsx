@@ -12,10 +12,6 @@ const footerLinks = {
     { href: "/privacy", label: "Privacy Policy" },
     { href: "/terms", label: "Terms of Service" },
   ],
-  social: [
-    { href: "https://github.com", label: "GitHub" },
-    { href: "https://x.com", label: "X (Twitter)" },
-  ],
 };
 
 export function Footer() {
@@ -63,24 +59,6 @@ export function Footer() {
                 >
                   {link.label}
                 </Link>
-              ))}
-            </nav>
-          </div>
-
-          {/* Social */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-semibold">Social</h4>
-            <nav className="flex flex-col gap-2">
-              {footerLinks.social.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {link.label}
-                </a>
               ))}
             </nav>
           </div>
