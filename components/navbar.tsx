@@ -22,7 +22,8 @@ const navLinks = [
 
 export function Navbar() {
   const pathname = usePathname();
-  const isDashboard = pathname.startsWith("/dashboard");
+  const isDashboard =
+    pathname.startsWith("/dashboard") || pathname.startsWith("/add");
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">

@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Trash2, Eye, EyeOff, Film, Tv } from "lucide-react";
+import Link from "next/link";
+import { Trash2, Eye, EyeOff, Film, Tv, Plus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -39,9 +40,14 @@ export function MovieList({
           </EmptyMedia>
           <EmptyTitle>No movies added yet</EmptyTitle>
           <EmptyDescription>
-            Select a person above and add titles from their filmography to start
-            building your list.
+            Search for a person and add titles from their filmography.
           </EmptyDescription>
+          <Button asChild className="mt-4">
+            <Link href="/add">
+              <Plus className="h-4 w-4 mr-1.5" />
+              Add Movies
+            </Link>
+          </Button>
         </EmptyHeader>
       </Empty>
     );
@@ -53,9 +59,17 @@ export function MovieList({
         <h2 className="text-lg font-semibold tracking-tight">
           Your Movie List
         </h2>
-        <Badge variant="secondary">
-          {movies.length} title{movies.length !== 1 ? "s" : ""}
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary">
+            {movies.length} title{movies.length !== 1 ? "s" : ""}
+          </Badge>
+          <Button asChild size="sm" variant="outline">
+            <Link href="/add">
+              <Plus className="h-4 w-4 mr-1.5" />
+              Add
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
@@ -101,17 +115,6 @@ export function MovieList({
                     </Badge>
                   </div>
                 )}
-
-                {/* Remove button */}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-2 left-2 z-10 h-7 w-7 bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60 hover:text-destructive"
-                  onClick={() => onRemoveMovie(movie.id)}
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                  <span className="sr-only">Remove movie</span>
-                </Button>
               </div>
 
               <div className="space-y-2 pt-2">
@@ -134,23 +137,34 @@ export function MovieList({
                   </Badge>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Switch
-                    checked={watched}
-                    onCheckedChange={() => onToggleWatched(movie.id)}
-                    size="sm"
-                  />
-                  <span className="text-xs text-muted-foreground flex items-center gap-1">
-                    {watched ? (
-                      <>
-                        <Eye className="h-3 w-3" /> Watched
-                      </>
-                    ) : (
-                      <>
-                        <EyeOff className="h-3 w-3" /> Not watched
-                      </>
-                    )}
-                  </span>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      checked={watched}
+                      onCheckedChange={() => onToggleWatched(movie.id)}
+                      size="sm"
+                    />
+                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      {watched ? (
+                        <>
+                          <Eye className="h-3 w-3" /> Watched
+                        </>
+                      ) : (
+                        <>
+                          <EyeOff className="h-3 w-3" /> Not watched
+                        </>
+                      )}
+                    </span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    onClick={() => onRemoveMovie(movie.id)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span className="sr-only">Remove movie</span>
+                  </Button>
                 </div>
               </div>
             </Card>
